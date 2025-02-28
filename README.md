@@ -1,2 +1,4 @@
-# balhom-transactions-api
-BalHom Transactions API which acts as a microservice for BalHom infrastructure
+# BalHom Transactions API
+
+BalHom Transactions API acts as a microservice for the BalHom infrastructure, providing functionalities to manage
+transactions.
