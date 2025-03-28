@@ -3,8 +3,8 @@ package org.balhom.currencyprofilesapi.common.handlers
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper
 import jakarta.ws.rs.ext.Provider
-import org.balhom.currencyprofilesapi.common.data.exceptions.ApiCodeException
-import org.balhom.currencyprofilesapi.common.data.responses.ApiCodeErrorResponse
+import org.balhom.transactionsapi.common.data.exceptions.ApiCodeException
+import org.balhom.transactionsapi.common.data.responses.ApiCodeErrorResponse
 
 @Provider
 class ApiCodeExceptionHandler : ExceptionMapper<ApiCodeException> {

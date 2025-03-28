@@ -1,6 +1,6 @@
 package org.balhom.currencyprofilesapi.common.clients.storage
 
-import org.balhom.currencyprofilesapi.common.data.models.FileData
+import org.balhom.transactionsapi.common.data.models.FileData
 
 interface ObjectStorageClient {
 

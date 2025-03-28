@@ -4,8 +4,8 @@ import jakarta.validation.ConstraintViolationException
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper
 import jakarta.ws.rs.ext.Provider
-import org.balhom.currencyprofilesapi.common.data.responses.ApiConstraintsErrorResponse
-import org.balhom.currencyprofilesapi.common.data.responses.ApiFieldErrorResponse
+import org.balhom.transactionsapi.common.data.responses.ApiConstraintsErrorResponse
+import org.balhom.transactionsapi.common.data.responses.ApiFieldErrorResponse
 
 @Provider
 class ConstraintViolationExceptionHandler : ExceptionMapper<ConstraintViolationException> {

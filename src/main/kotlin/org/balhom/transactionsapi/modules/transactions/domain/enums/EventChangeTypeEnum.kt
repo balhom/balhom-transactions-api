@@ -1,4 +1,4 @@
-package org.balhom.transactionsapi.common.data.enums
+package org.balhom.transactionsapi.modules.transactions.domain.enums
 
 enum class EventChangeTypeEnum {
     CREATE, UPDATE, DELETE;

@@ -1,4 +1,4 @@
-package org.balhom.currencyprofilesapi.common.data.exceptions
+package org.balhom.transactionsapi.common.data.exceptions
 
 open class ApiCodeException(
     val errorCode: Int,

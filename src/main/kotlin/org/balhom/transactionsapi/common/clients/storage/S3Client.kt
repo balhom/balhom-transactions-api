@@ -1,7 +1,7 @@
 package org.balhom.currencyprofilesapi.common.clients.storage
 
 import jakarta.enterprise.context.ApplicationScoped
-import org.balhom.currencyprofilesapi.common.data.models.FileData
+import org.balhom.transactionsapi.common.data.models.FileData
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.S3Client

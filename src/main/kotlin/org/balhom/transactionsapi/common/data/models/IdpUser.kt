@@ -1,4 +1,4 @@
-package org.balhom.currencyprofilesapi.common.data.models
+package org.balhom.transactionsapi.common.data.models
 
 import java.util.UUID
 

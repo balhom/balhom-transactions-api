@@ -1,0 +1,32 @@
+package org.balhom.transactionsapi.modules.transactions.domain.enums
+
+enum class TransactionCategoryEnum {
+    // Income categories
+    INCOME_SALARY,
+    INCOME_BIZUM,
+    INCOME_TRANSFER,
+    INCOME_INVESTMENTS,
+    INCOME_BUSINESS,
+    INCOME_GIFT,
+    INCOME_DEPOSIT,
+    INCOME_SALES,
+    INCOME_OTHER,
+
+    // Expense categories
+    EXPENSE_BIZUM,
+    EXPENSE_TRANSFER,
+    EXPENSE_HOUSING,
+    EXPENSE_TRANSPORTATION,
+    EXPENSE_FOOD,
+    EXPENSE_HEALTH,
+    EXPENSE_DEBT,
+    EXPENSE_INVESTMENTS,
+    EXPENSE_FAMILY,
+    EXPENSE_LEISURE,
+    EXPENSE_VACATIONS,
+    EXPENSE_INSURANCE,
+    EXPENSE_TAXES,
+    EXPENSE_BILLS,
+    EXPENSE_SHOPPING,
+    EXPENSE_OTHER
+}
