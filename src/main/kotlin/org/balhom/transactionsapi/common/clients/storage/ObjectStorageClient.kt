@@ -1,4 +1,4 @@
-package org.balhom.currencyprofilesapi.common.clients.storage
+package org.balhom.transactionsapi.common.clients.storage
 
 import org.balhom.transactionsapi.common.data.models.FileData
 

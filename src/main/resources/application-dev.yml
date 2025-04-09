@@ -1,0 +1,66 @@
+quarkus:
+  log:
+    level: INFO
+
+  oidc:
+    auth-server-url: http://localhost:7080/realms/balhom-realm
+    client-id: balhom-client
+    application-type: service
+
+  datasource:
+    db-kind: postgresql
+    username: admin
+    password: password
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/balhom_transaction_db
+
+  flyway:
+    enabled: true
+    migrate-at-start: true
+
+  smallrye-openapi:
+    info-title: Transaction API
+    path: /openapi
+    security-scheme: jwt
+
+  swagger-ui:
+    path: /swagger
+
+  s3:
+    endpoint-override: http://localhost:9090
+    path-style-access: true
+    sync-client:
+      type: apache
+    aws:
+      region: us-west-2
+      credentials:
+        type: static
+        static-provider:
+          access-key-id: admin
+          secret-access-key: password
+    devservices:
+      enabled: false
+    bucket:
+      name: balhom-transactions-api-bucket
+
+  rest-client:
+    currency-profiles-api:
+      url: http://localhost:8081
+      scope: jakarta.inject.Singleton
+
+kafka:
+  bootstrap:
+    servers: PLAINTEXT_HOST://localhost:29092
+
+mp:
+  messaging:
+    outgoing:
+      transaction-events:
+        connector: smallrye-kafka
+        topic: transaction-events
+    incoming:
+      currency-profile-events:
+        connector: smallrye-kafka
+        topic: currency-profile-events
+        group:
+          id: transaction-group

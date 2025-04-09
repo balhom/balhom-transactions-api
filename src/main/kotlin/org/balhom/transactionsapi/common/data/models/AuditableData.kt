@@ -7,6 +7,4 @@ data class AuditableData(
     var createdBy: String?,
     var updatedAt: LocalDateTime?,
     var updatedBy: String?,
-) {
-    constructor() : this(null, null, null, null)
-}
+)

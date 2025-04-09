@@ -1,0 +1,5 @@
+CREATE INDEX idx_app_transactions_currency_profile_id ON app_transactions(currency_profile_id);
+
+CREATE INDEX idx_app_transactions_transaction_type ON app_transactions(transaction_type);
+
+CREATE INDEX idx_app_transactions_category ON app_transactions(category);

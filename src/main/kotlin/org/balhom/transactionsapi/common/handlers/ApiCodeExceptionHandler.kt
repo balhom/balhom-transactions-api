@@ -1,4 +1,4 @@
-package org.balhom.currencyprofilesapi.common.handlers
+package org.balhom.transactionsapi.common.handlers
 
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper

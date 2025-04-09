@@ -1,11 +1,13 @@
 package org.balhom.transactionsapi.modules.currencyprofilechanges.domain.models
 
-import java.util.UUID
+import java.math.BigDecimal
+import java.util.*
 
 data class CurrencyProfileReference(
-    val id: UUID,
-    val balance: Double,
-    val monthlyGoal: Double,
-    val yearlyGoal: Double,
-    val ownerId: UUID
+    var id: UUID,
+    var balance: BigDecimal,
+    var goalMonthlySaving: BigDecimal,
+    var goalYearlySaving: BigDecimal,
+    var sharedUsers: List<CurrencyProfileSharedUser>,
+    var userId: UUID
 )

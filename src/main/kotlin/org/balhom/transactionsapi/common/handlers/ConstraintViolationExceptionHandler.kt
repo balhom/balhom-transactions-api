@@ -1,4 +1,4 @@
-package org.balhom.currencyprofilesapi.common.handlers
+package org.balhom.transactionsapi.common.handlers
 
 import jakarta.validation.ConstraintViolationException
 import jakarta.ws.rs.core.Response

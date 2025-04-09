@@ -6,17 +6,17 @@ import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionC
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.exceptions.TransactionDocumentsExceededException
 import org.balhom.transactionsapi.modules.transactions.domain.props.UpdateTransactionProps
+import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 data class Transaction(
     var id: UUID,
-    var userId: UUID,
     var currencyProfileId: UUID,
     var title: String,
-    var description: String,
+    var description: String?,
     var type: TransactionTypeEnum,
-    var amount: Double,
+    var amount: BigDecimal,
     var date: LocalDateTime,
     var category: TransactionCategoryEnum,
     var documents: MutableList<FileReferenceData>,
@@ -28,17 +28,26 @@ data class Transaction(
 
     fun update(props: UpdateTransactionProps) {
         id = props.id
-        userId = props.userId
 
-        title = props.title
-        description = props.description
-        amount = props.amount
-        date = props.date
-        category = props.category
+        if (props.title != null) {
+            title = props.title
+        }
+        if (props.description != null) {
+            description = props.description
+        }
+        if (props.amount != null) {
+            amount = props.amount
+        }
+        if (props.date != null) {
+            date = props.date
+        }
+        if (props.category != null) {
+            category = props.category
+        }
 
         // Auditable section
         auditableData.updatedAt = LocalDateTime.now()
-        auditableData.updatedBy = userId.toString()
+        auditableData.updatedBy = props.userId.toString()
 
         validate()
     }
