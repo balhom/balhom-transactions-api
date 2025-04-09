@@ -126,4 +126,10 @@ class TransactionService(
         transactionRepository
             .delete(transaction)
     }
+
+    fun deleteAllTransactions(currencyProfileId: UUID) {
+        transactionRepository.deleteAllByCurrencyProfileId(
+            currencyProfileId
+        )
+    }
 }

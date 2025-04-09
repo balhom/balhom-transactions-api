@@ -14,6 +14,10 @@ class CurrencyProfileChangeEventConsumer(
     fun receive(event: CurrencyProfileChangeEvent) {
         Log.debug("Consuming Kafka currency profile event: " + event.id)
 
-        // TODO Call transactionService.deleteAll
+        if (event.action == "D") {
+            transactionService.deleteAllTransactions(
+                event.id
+            )
+        }
     }
 }
