@@ -98,6 +98,12 @@ class TransactionSqlEntity : AuditableDataSqlEntity() {
         const val DATE_COLUMN_NAME = "transaction_date"
         const val CATEGORY_COLUMN_NAME = "category"
 
+        const val ID_FIELD = "id"
+        const val CURRENCY_PROFILE_ID_FIELD = "currencyProfileId"
+        const val TITLE_FIELD = "title"
+        const val DATE_FIELD = "date"
+        const val AMOUNT_FIELD = "amount"
+
         fun fromDomain(domain: Transaction): TransactionSqlEntity {
             val entity = TransactionSqlEntity()
 

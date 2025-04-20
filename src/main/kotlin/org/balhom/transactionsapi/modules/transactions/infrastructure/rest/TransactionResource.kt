@@ -3,23 +3,32 @@ package org.balhom.transactionsapi.modules.transactions.infrastructure.rest
 import io.quarkus.security.Authenticated
 import jakarta.inject.Inject
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
+import jakarta.ws.rs.BeanParam
 import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.PATCH
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
-import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.core.MediaType
 import jakarta.ws.rs.core.Response
+import org.balhom.transactionsapi.common.data.models.ApiPage
+import org.balhom.transactionsapi.common.data.params.ApiPageParams
 import org.balhom.transactionsapi.common.data.props.ObjectIdUserProps
 import org.balhom.transactionsapi.modules.transactions.application.TransactionService
+import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionSortEnum
 import org.balhom.transactionsapi.modules.transactions.domain.props.CreateTransactionProps
+import org.balhom.transactionsapi.modules.transactions.domain.props.GetAllTransactionsProps
+import org.balhom.transactionsapi.modules.transactions.domain.props.TransactionSortAndFilterProps
+import org.balhom.transactionsapi.modules.transactions.infrastructure.rest.data.params.TransactionFilterParams
 import org.balhom.transactionsapi.modules.transactions.infrastructure.rest.data.requests.TransactionPatchRequest
 import org.balhom.transactionsapi.modules.transactions.infrastructure.rest.data.requests.TransactionPostRequest
 import org.balhom.transactionsapi.modules.transactions.infrastructure.rest.data.responses.TransactionResponse
 import org.eclipse.microprofile.jwt.JsonWebToken
+import org.jboss.resteasy.reactive.RestPath
+import org.jboss.resteasy.reactive.RestQuery
 import java.util.*
 
 @Path(TransactionResource.RESOURCE_PATH)
@@ -37,7 +46,7 @@ class TransactionResource(private val service: TransactionService) {
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id: UUID):
+    fun getById(@RestPath id: UUID):
             TransactionResponse {
         val currencyProfile = service
             .getTransaction(
@@ -49,6 +58,41 @@ class TransactionResource(private val service: TransactionService) {
         return TransactionResponse.fromDomain(
             currencyProfile
         )
+    }
+
+    @GET
+    fun getAll(
+        @RestQuery
+        @NotNull
+        currencyProfileId: UUID,
+        @BeanParam @Valid filterParams: TransactionFilterParams,
+        @BeanParam @Valid pageParams: ApiPageParams,
+        @RestQuery sortBy: TransactionSortEnum?,
+    ): ApiPage<TransactionResponse> {
+
+        val currencyProfileProps = ObjectIdUserProps(
+            currencyProfileId,
+            UUID.fromString(jwt.subject)
+        )
+        val sortAndFilterProps = TransactionSortAndFilterProps(
+            month = filterParams.month,
+            year = filterParams.year,
+            minAmount = filterParams.minAmount,
+            maxAmount = filterParams.maxAmount,
+            textSearch = filterParams.textSearch,
+            sortBy = sortBy ?: TransactionSortEnum.DATE_DESC,
+        )
+
+        val transactionsPage = service
+            .getTransactions(
+                GetAllTransactionsProps(
+                    currencyProfileProps,
+                    pageParams.toProps(),
+                    sortAndFilterProps
+                )
+            )
+        return transactionsPage
+            .map { TransactionResponse.fromDomain(it) }
     }
 
     @POST
@@ -78,7 +122,7 @@ class TransactionResource(private val service: TransactionService) {
     @PATCH
     @Path("/{id}")
     fun update(
-        @PathParam("id") id: UUID,
+        @RestPath id: UUID,
         @Valid request: TransactionPatchRequest
     ): Response {
         service.updateTransaction(
@@ -95,7 +139,7 @@ class TransactionResource(private val service: TransactionService) {
 
     @DELETE
     @Path("/{id}")
-    fun deleteById(@PathParam("id") id: UUID): Response {
+    fun deleteById(@RestPath id: UUID): Response {
         service.deleteTransaction(
             ObjectIdUserProps(
                 id,

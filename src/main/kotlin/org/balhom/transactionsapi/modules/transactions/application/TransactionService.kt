@@ -3,6 +3,7 @@ package org.balhom.transactionsapi.modules.transactions.application
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
 import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
+import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ObjectIdUserProps
 import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.clients.CurrencyProfileReferenceClient
 import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.exceptions.CurrencyProfileReferenceNotFoundException
@@ -11,6 +12,7 @@ import org.balhom.transactionsapi.modules.transactions.domain.exceptions.Transac
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
 import org.balhom.transactionsapi.modules.transactions.domain.producers.TransactionChangeEventProducer
 import org.balhom.transactionsapi.modules.transactions.domain.props.CreateTransactionProps
+import org.balhom.transactionsapi.modules.transactions.domain.props.GetAllTransactionsProps
 import org.balhom.transactionsapi.modules.transactions.domain.props.UpdateTransactionProps
 import org.balhom.transactionsapi.modules.transactions.domain.repositories.TransactionRepository
 import java.util.*
@@ -57,6 +59,21 @@ class TransactionService(
         )
 
         return transaction
+    }
+
+    fun getTransactions(props: GetAllTransactionsProps): ApiPage<Transaction> {
+        val currencyProfileReference = getCurrencyProfileReferenceAndValidate(
+            props.currencyProfileProps.userId,
+            props.currencyProfileProps.id
+        )
+
+        val transactionsPage = transactionRepository.findAll(
+            currencyProfileReference.id,
+            props.sortAndFilterProps,
+            props.pageProps
+        )
+
+        return transactionsPage
     }
 
     fun createTransaction(props: CreateTransactionProps): Transaction {

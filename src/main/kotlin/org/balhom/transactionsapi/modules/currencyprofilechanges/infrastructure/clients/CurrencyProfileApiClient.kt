@@ -3,10 +3,10 @@ package org.balhom.transactionsapi.modules.currencyprofilechanges.infrastructure
 import io.quarkus.oidc.token.propagation.common.AccessToken
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
-import jakarta.ws.rs.PathParam
 import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.models.CurrencyProfileSharedUser
 import org.balhom.transactionsapi.modules.currencyprofilechanges.infrastructure.clients.responses.CurrencyProfileResponse
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient
+import org.jboss.resteasy.reactive.RestPath
 import java.util.*
 
 @Path("/api/v1/currency-profile")
@@ -16,9 +16,9 @@ interface CurrencyProfileApiClient {
 
     @GET
     @Path("/{id}")
-    fun getById(@PathParam("id") id: UUID): CurrencyProfileResponse
+    fun getById(@RestPath id: UUID): CurrencyProfileResponse
 
     @GET
     @Path("/{id}/users")
-    fun getSharedUsersById(@PathParam("id") id: UUID): List<CurrencyProfileSharedUser>
+    fun getSharedUsersById(@RestPath id: UUID): List<CurrencyProfileSharedUser>
 }
