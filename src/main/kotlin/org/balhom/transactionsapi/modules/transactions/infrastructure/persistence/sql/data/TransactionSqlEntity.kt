@@ -1,18 +1,19 @@
 package org.balhom.transactionsapi.modules.transactions.infrastructure.persistence.sql.data
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
-import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
 import org.balhom.transactionsapi.common.data.models.AuditableData
 import org.balhom.transactionsapi.common.data.sql.AuditableDataSqlEntity
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionCategoryEnum
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
-import org.balhom.transactionsapi.modules.transactions.infrastructure.persistence.sql.TransactionSqlRepository
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
@@ -47,26 +48,16 @@ class TransactionSqlEntity : AuditableDataSqlEntity() {
     @Enumerated(EnumType.STRING)
     lateinit var category: TransactionCategoryEnum
 
-    fun toDomain(
-        transactionSqlRepository: TransactionSqlRepository,
-        objectStorageClient: ObjectStorageClient,
-    ): Transaction {
-        /*
-        if (documentEntity.filePath != null) {
-            if (!objectStorageClient.doesObjectExist(documentEntity.filePath)) {
-                document = null
-            } else if (
-                (document?.url == null)
-                || (
-                        document?.expiration != null
-                                && document!!.expiration!!.isBefore(LocalDateTime.now()))
-            ) {
-                updateDocumentData(documentEntity, objectStorageClient)
-                transactionDocumentSqlRepository.update(documentEntity)
-            }
-        }
-        */
+    @OneToMany(
+        mappedBy = TransactionDocumentSqlEntity.TRANSACTION_FIELD,
+        fetch = FetchType.EAGER,
+        targetEntity = TransactionDocumentSqlEntity::class,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    lateinit var documents: List<TransactionDocumentSqlEntity>
 
+    fun toDomain(): Transaction {
         return Transaction(
             id,
             currencyProfileId,
@@ -76,7 +67,7 @@ class TransactionSqlEntity : AuditableDataSqlEntity() {
             amount,
             date,
             category,
-            Collections.emptyList(),
+            documents.map { it.toDomain() },
             AuditableData(
                 createdAt = createdAt,
                 createdBy = createdBy,
@@ -115,7 +106,15 @@ class TransactionSqlEntity : AuditableDataSqlEntity() {
             entity.amount = domain.amount
             entity.date = domain.date
             entity.category = domain.category
-            // TODO entity.documents = domain.documents
+            entity.documents = domain
+                .documents
+                .map {
+                    TransactionDocumentSqlEntity.fromDomain(
+                        it,
+                        entity
+                    )
+                }
+
             entity.createdAt = domain.auditableData.createdAt
             entity.createdBy = domain.auditableData.createdBy
             entity.updatedAt = domain.auditableData.updatedAt

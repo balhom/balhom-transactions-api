@@ -38,13 +38,15 @@ quarkus:
           secret-access-key: ${S3_SECRET_KEY}
     devservices:
       enabled: false
-    bucket:
-      name: ${S3_BUCKET_NAME:balhom-bucket}
 
   rest-client:
     currency-profiles-api:
       url: http://localhost:8081
       scope: jakarta.inject.Singleton
+
+s3:
+  bucket:
+    name: ${S3_BUCKET_NAME:balhom-bucket}
 
 kafka:
   bootstrap:

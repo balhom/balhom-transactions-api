@@ -2,7 +2,7 @@ package org.balhom.transactionsapi.modules.transactions.infrastructure.rest.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.balhom.transactionsapi.common.config.TimeConfig
-import org.balhom.transactionsapi.common.data.models.FileReferenceData
+import org.balhom.transactionsapi.common.data.responses.FileReferenceDataResponse
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionCategoryEnum
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
@@ -20,7 +20,7 @@ data class TransactionResponse(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TimeConfig.DATE_TIME_ISO_FORMAT)
     val date: LocalDateTime,
     val category: TransactionCategoryEnum,
-    var documents: MutableList<FileReferenceData>,
+    var documents: List<FileReferenceDataResponse>,
 ) {
     companion object {
         fun fromDomain(domain: Transaction): TransactionResponse = TransactionResponse(
@@ -32,7 +32,8 @@ data class TransactionResponse(
             domain.amount,
             domain.date,
             domain.category,
-            domain.documents,
+            domain.documents
+                .map { FileReferenceDataResponse.fromDomain(it) },
         )
     }
 }

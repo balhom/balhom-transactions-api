@@ -19,7 +19,7 @@ data class Transaction(
     var amount: BigDecimal,
     var date: LocalDateTime,
     var category: TransactionCategoryEnum,
-    var documents: MutableList<FileReferenceData>,
+    var documents: List<FileReferenceData>,
     var auditableData: AuditableData,
 ) {
     companion object {

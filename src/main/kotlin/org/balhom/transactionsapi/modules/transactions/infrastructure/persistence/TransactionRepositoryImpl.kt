@@ -3,7 +3,6 @@ package org.balhom.transactionsapi.modules.transactions.infrastructure.persisten
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
 import jakarta.enterprise.context.ApplicationScoped
-import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
 import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ApiPageProps
 import org.balhom.transactionsapi.common.data.sql.PageSqlMapper
@@ -21,15 +20,14 @@ import java.util.*
 
 @ApplicationScoped
 class TransactionRepositoryImpl(
-    private val transactionSqlRepository: TransactionSqlRepository,
-    private val objectStorageClient: ObjectStorageClient,
+    private val transactionSqlRepository: TransactionSqlRepository
 ) : TransactionRepository {
 
     override fun findById(id: UUID): Transaction? {
         return transactionSqlRepository
             .find("id", id)
             .firstResult()
-            ?.toDomain(transactionSqlRepository, objectStorageClient)
+            ?.toDomain()
     }
 
     override fun findAll(
@@ -122,10 +120,7 @@ class TransactionRepositoryImpl(
             query,
             pageProps
         ).map {
-            it.toDomain(
-                transactionSqlRepository,
-                objectStorageClient
-            )
+            it.toDomain()
         }
     }
 
@@ -149,10 +144,7 @@ class TransactionRepositoryImpl(
 
         transactionSqlRepository.persist(entity)
 
-        return entity.toDomain(
-            transactionSqlRepository,
-            objectStorageClient
-        )
+        return entity.toDomain()
     }
 
     override fun delete(transaction: Transaction) {
