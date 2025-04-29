@@ -12,13 +12,4 @@ data class CurrencyProfileChangeEvent(
     var monthlyGoal: BigDecimal,
     var yearlyGoal: BigDecimal,
     var ownerId: UUID,
-) {
-    constructor() : this(
-        "",
-        UUID.randomUUID(),
-        BigDecimal(0),
-        BigDecimal(0),
-        BigDecimal(0),
-        UUID.randomUUID()
-    )
-}
+)

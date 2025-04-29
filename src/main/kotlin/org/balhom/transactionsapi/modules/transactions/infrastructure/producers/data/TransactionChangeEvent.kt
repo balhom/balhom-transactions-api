@@ -14,15 +14,4 @@ data class TransactionChangeEvent(
     var cpGoalYearlySaving: BigDecimal,
     var currencyProfileId: UUID,
     var userId: UUID,
-) {
-    constructor() : this(
-        "",
-        UUID.randomUUID(),
-        BigDecimal(0),
-        null,
-        BigDecimal(0),
-        BigDecimal(0),
-        UUID.randomUUID(),
-        UUID.randomUUID()
-    )
-}
+)
