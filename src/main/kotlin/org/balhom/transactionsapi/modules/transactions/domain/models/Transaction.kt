@@ -24,6 +24,8 @@ data class Transaction(
 ) {
     companion object {
         const val MAX_ALLOWED_DOCUMENTS = 3
+
+        const val IMAGE_PATH_PREFIX = "transactions"
     }
 
     fun update(props: UpdateTransactionProps) {

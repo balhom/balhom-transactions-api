@@ -11,4 +11,6 @@ interface ObjectStorageClient {
     fun uploadObject(fileData: FileData)
 
     fun deleteObject(objectKey: String)
+
+    fun deleteObjects(objectKeyPrefix: String)
 }

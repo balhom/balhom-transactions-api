@@ -3,6 +3,7 @@ package org.balhom.transactionsapi.modules.transactions.infrastructure.persisten
 import io.quarkus.panache.common.Page
 import io.quarkus.panache.common.Sort
 import jakarta.enterprise.context.ApplicationScoped
+import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
 import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ApiPageProps
 import org.balhom.transactionsapi.common.data.sql.PageSqlMapper
@@ -20,7 +21,8 @@ import java.util.*
 
 @ApplicationScoped
 class TransactionRepositoryImpl(
-    private val transactionSqlRepository: TransactionSqlRepository
+    private val transactionSqlRepository: TransactionSqlRepository,
+    private val objectStorageClient: ObjectStorageClient
 ) : TransactionRepository {
 
     override fun findById(id: UUID): Transaction? {
@@ -148,22 +150,31 @@ class TransactionRepositoryImpl(
     }
 
     override fun delete(transaction: Transaction) {
-        // TODO remove all document from objectStorageClient
-
         transactionSqlRepository
             .delete(
                 TransactionSqlEntity.ID_FIELD,
                 transaction.id
             )
+
+        // Remove all documents from objectStorageClient
+        objectStorageClient.deleteObject(
+            Transaction.IMAGE_PATH_PREFIX
+                    + "/" + transaction.currencyProfileId + "/"
+                    + transaction.id.toString()
+        )
     }
 
     override fun deleteAllByCurrencyProfileId(currencyProfileId: UUID) {
-        // TODO remove all document from objectStorageClient
-
         transactionSqlRepository
             .delete(
                 TransactionSqlEntity.CURRENCY_PROFILE_ID_FIELD,
                 currencyProfileId
             )
+
+        // Remove all documents from objectStorageClient
+        objectStorageClient.deleteObjects(
+            Transaction.IMAGE_PATH_PREFIX
+                    + "/" + currencyProfileId
+        )
     }
 }

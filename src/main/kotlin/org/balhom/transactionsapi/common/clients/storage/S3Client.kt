@@ -8,6 +8,7 @@ import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.S3Exception
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
@@ -65,6 +66,22 @@ class S3Client(
         s3Client.deleteObject(
             buildDeleteRequest(objectKey)
         )
+    }
+
+    override fun deleteObjects(objectKeyPrefix: String) {
+        val listRequest = ListObjectsV2Request.builder()
+            .bucket(bucketName)
+            .prefix(objectKeyPrefix)
+            .build()
+
+        val response = s3Client
+            .listObjectsV2Paginator(listRequest)
+
+        response
+            .contents()
+            .forEach { s3Object ->
+                deleteObject(s3Object.key())
+            }
     }
 
     private fun buildPutRequest(fileData: FileData): PutObjectRequest {
