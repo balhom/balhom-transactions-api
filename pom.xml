@@ -17,7 +17,6 @@
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.2</surefire-plugin.version>
         <rest-assured.version>5.5.0</rest-assured.version>
-        <vault.version>4.1.0</vault.version>
         <amazon-s3.version>3.2.0</amazon-s3.version>
         <amazon-software.version>2.30.16</amazon-software.version>
         <jackson.version>2.18.2</jackson.version>
@@ -73,12 +72,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
             <version>${quarkus.platform.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.quarkiverse.vault</groupId>
-            <artifactId>quarkus-vault</artifactId>
-            <version>${vault.version}</version>
         </dependency>
 
         <dependency>

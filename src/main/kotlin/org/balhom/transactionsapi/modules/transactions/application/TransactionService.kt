@@ -2,12 +2,9 @@ package org.balhom.transactionsapi.modules.transactions.application
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
-import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
 import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ObjectIdUserProps
-import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.clients.CurrencyProfileReferenceClient
-import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.exceptions.CurrencyProfileReferenceNotFoundException
-import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.models.CurrencyProfileReference
+import org.balhom.transactionsapi.modules.currencyprofilechanges.application.CurrencyProfileService
 import org.balhom.transactionsapi.modules.transactions.domain.exceptions.TransactionNotFoundException
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
 import org.balhom.transactionsapi.modules.transactions.domain.producers.TransactionChangeEventProducer
@@ -20,40 +17,16 @@ import java.util.*
 @ApplicationScoped
 @Transactional
 class TransactionService(
-    private val currencyProfileReferenceClient: CurrencyProfileReferenceClient,
+    private val currencyProfileService: CurrencyProfileService,
     private val transactionRepository: TransactionRepository,
     private val transactionChangeEventProducer: TransactionChangeEventProducer,
-    private val objectStorageClient: ObjectStorageClient,
 ) {
-    companion object {
-        const val TRANSACTION_PROFILE_PATH_PREFIX = "transactions"
-    }
-
-    private fun getCurrencyProfileReferenceAndValidate(
-        userId: UUID,
-        currencyProfileId: UUID
-    ): CurrencyProfileReference {
-        val currencyProfileReference = currencyProfileReferenceClient
-            .getById(currencyProfileId)
-            ?: throw CurrencyProfileReferenceNotFoundException()
-
-        // Check user permission
-        if (
-            currencyProfileReference.userId != userId
-            && !currencyProfileReference.sharedUsers.any({ it.id == userId })
-        ) {
-            throw CurrencyProfileReferenceNotFoundException()
-        }
-
-        return currencyProfileReference
-    }
-
     fun getTransaction(props: ObjectIdUserProps): Transaction {
         val transaction = transactionRepository.findById(
             props.id
         ) ?: throw TransactionNotFoundException()
 
-        getCurrencyProfileReferenceAndValidate(
+        currencyProfileService.getCurrencyProfileReferenceAndValidate(
             props.userId,
             transaction.currencyProfileId
         )
@@ -62,10 +35,11 @@ class TransactionService(
     }
 
     fun getTransactions(props: GetAllTransactionsProps): ApiPage<Transaction> {
-        val currencyProfileReference = getCurrencyProfileReferenceAndValidate(
-            props.currencyProfileProps.userId,
-            props.currencyProfileProps.id
-        )
+        val currencyProfileReference = currencyProfileService
+            .getCurrencyProfileReferenceAndValidate(
+                props.currencyProfileProps.userId,
+                props.currencyProfileProps.id
+            )
 
         val transactionsPage = transactionRepository.findAll(
             currencyProfileReference.id,
@@ -79,10 +53,11 @@ class TransactionService(
     fun createTransaction(props: CreateTransactionProps): Transaction {
         props.transaction.validate()
 
-        val currencyProfileReference = getCurrencyProfileReferenceAndValidate(
-            props.userId,
-            props.transaction.currencyProfileId
-        )
+        val currencyProfileReference = currencyProfileService
+            .getCurrencyProfileReferenceAndValidate(
+                props.userId,
+                props.transaction.currencyProfileId
+            )
 
         val newTransaction = transactionRepository
             .save(props.transaction)
@@ -104,10 +79,11 @@ class TransactionService(
             )
         )
 
-        val currencyProfileReference = getCurrencyProfileReferenceAndValidate(
-            props.userId,
-            transaction.currencyProfileId
-        )
+        val currencyProfileReference = currencyProfileService
+            .getCurrencyProfileReferenceAndValidate(
+                props.userId,
+                transaction.currencyProfileId
+            )
 
         val oldTransactionAmount = transaction.amount
 
@@ -129,10 +105,11 @@ class TransactionService(
     fun deleteTransaction(props: ObjectIdUserProps) {
         val transaction = getTransaction(props)
 
-        val currencyProfileReference = getCurrencyProfileReferenceAndValidate(
-            props.userId,
-            transaction.currencyProfileId
-        )
+        val currencyProfileReference = currencyProfileService
+            .getCurrencyProfileReferenceAndValidate(
+                props.userId,
+                transaction.currencyProfileId
+            )
 
         transactionChangeEventProducer.sendDeleteEvent(
             transaction,

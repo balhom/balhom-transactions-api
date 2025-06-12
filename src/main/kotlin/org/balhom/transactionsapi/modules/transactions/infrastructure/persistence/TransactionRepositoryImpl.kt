@@ -158,9 +158,7 @@ class TransactionRepositoryImpl(
 
         // Remove all documents from objectStorageClient
         objectStorageClient.deleteObject(
-            Transaction.IMAGE_PATH_PREFIX
-                    + "/" + transaction.currencyProfileId + "/"
-                    + transaction.id.toString()
+            transaction.getDocumentsPath()
         )
     }
 

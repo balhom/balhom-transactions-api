@@ -41,7 +41,7 @@ quarkus:
 
   rest-client:
     currency-profiles-api:
-      url: http://localhost:8081
+      url: ${CURRENCY_PROFILES_API_URL}
       scope: jakarta.inject.Singleton
 
 s3:

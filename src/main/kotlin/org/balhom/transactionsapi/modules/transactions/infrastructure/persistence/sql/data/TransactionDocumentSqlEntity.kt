@@ -9,7 +9,6 @@ import jakarta.persistence.Table
 import org.balhom.transactionsapi.common.data.models.AuditableData
 import org.balhom.transactionsapi.common.data.models.FileReferenceData
 import org.balhom.transactionsapi.common.data.sql.AuditableDataSqlEntity
-import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -29,19 +28,11 @@ class TransactionDocumentSqlEntity : AuditableDataSqlEntity() {
     @Column(name = PATH_COLUMN_NAME, nullable = false)
     lateinit var path: String
 
-    @Column(name = URL_COLUMN_NAME)
-    var url: String? = null
-
-    @Column(name = URL_EXPIRATION_COLUMN_NAME)
-    var urlExpiration: LocalDateTime? = null
-
     fun toDomain(): FileReferenceData {
         return FileReferenceData(
             id,
             name,
             path,
-            url,
-            urlExpiration,
             AuditableData(
                 createdAt = createdAt,
                 createdBy = createdBy,
@@ -58,8 +49,8 @@ class TransactionDocumentSqlEntity : AuditableDataSqlEntity() {
         const val TRANSACTION_ID_COLUMN_NAME = "app_transaction_id"
         const val NAME_COLUMN_NAME = "name"
         const val PATH_COLUMN_NAME = "path"
-        const val URL_COLUMN_NAME = "url"
-        const val URL_EXPIRATION_COLUMN_NAME = "url_expiration"
+
+        const val ID_FIELD = "id"
 
         const val TRANSACTION_FIELD = "transaction"
 
@@ -73,8 +64,6 @@ class TransactionDocumentSqlEntity : AuditableDataSqlEntity() {
             entity.transaction = transaction
             entity.name = domain.name
             entity.path = domain.filePath
-            entity.url = domain.url
-            entity.urlExpiration = domain.urlExpiration
 
             entity.createdAt = domain.auditableData?.createdAt
             entity.createdBy = domain.auditableData?.createdBy

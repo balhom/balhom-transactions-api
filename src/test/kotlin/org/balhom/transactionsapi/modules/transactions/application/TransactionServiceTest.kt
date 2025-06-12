@@ -1,8 +1,7 @@
 package org.balhom.transactionsapi.modules.transactions.application
 
-import org.balhom.transactionsapi.common.clients.storage.ObjectStorageClient
 import org.balhom.transactionsapi.common.data.props.ObjectIdUserProps
-import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.clients.CurrencyProfileReferenceClient
+import org.balhom.transactionsapi.modules.currencyprofilechanges.application.CurrencyProfileService
 import org.balhom.transactionsapi.modules.currencyprofilechanges.domain.models.MockCurrencyProfileReferenceFactory
 import org.balhom.transactionsapi.modules.transactions.domain.models.MockTransactionFactory
 import org.balhom.transactionsapi.modules.transactions.domain.producers.TransactionChangeEventProducer
@@ -17,17 +16,16 @@ import java.util.*
 
 class TransactionServiceTest {
 
-    private lateinit var currencyProfileReferenceClient: CurrencyProfileReferenceClient
+    private lateinit var currencyProfileService: CurrencyProfileService
     private lateinit var transactionRepository: TransactionRepository
     private lateinit var transactionChangeEventProducer: TransactionChangeEventProducer
-    private lateinit var objectStorageClient: ObjectStorageClient
 
     private lateinit var transactionService: TransactionService
 
     @BeforeEach
     fun setUp() {
-        currencyProfileReferenceClient = mock(
-            CurrencyProfileReferenceClient::class.java
+        currencyProfileService = mock(
+            CurrencyProfileService::class.java
         )
         transactionRepository = mock(
             TransactionRepository::class.java
@@ -35,15 +33,11 @@ class TransactionServiceTest {
         transactionChangeEventProducer = mock(
             TransactionChangeEventProducer::class.java
         )
-        objectStorageClient = mock(
-            ObjectStorageClient::class.java
-        )
 
         transactionService = TransactionService(
-            currencyProfileReferenceClient,
+            currencyProfileService,
             transactionRepository,
-            transactionChangeEventProducer,
-            objectStorageClient
+            transactionChangeEventProducer
         )
     }
 
@@ -64,11 +58,6 @@ class TransactionServiceTest {
             transactionRepository
                 .findById(transactionId)
         ).thenReturn(expectedTransaction)
-
-        `when`(
-            currencyProfileReferenceClient
-                .getById(expectedTransaction.currencyProfileId)
-        ).thenReturn(expectedCurrencyProfileReference)
 
         val result = transactionService.getTransaction(
             ObjectIdUserProps(

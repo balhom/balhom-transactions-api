@@ -3,8 +3,6 @@ CREATE TABLE app_transaction_documents (
     app_transaction_id UUID NOT NULL,
     name TEXT NOT NULL,
     path TEXT NOT NULL,
-    url TEXT,
-    url_expiration TIMESTAMP WITHOUT TIME ZONE,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     created_by TEXT,
     updated_at TIMESTAMP WITHOUT TIME ZONE,

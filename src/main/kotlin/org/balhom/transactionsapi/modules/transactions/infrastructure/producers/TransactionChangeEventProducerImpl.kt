@@ -33,6 +33,8 @@ class TransactionChangeEventProducerImpl(
             TransactionChangeEvent(
                 "C",
                 transaction.id,
+                transaction.type,
+                transaction.date,
                 transaction.amount,
                 null,
                 currencyProfile.goalMonthlySaving,
@@ -53,6 +55,8 @@ class TransactionChangeEventProducerImpl(
             TransactionChangeEvent(
                 "U",
                 newTransaction.id,
+                newTransaction.type,
+                newTransaction.date,
                 newTransaction.amount,
                 oldTransactionAmount,
                 currencyProfile.goalMonthlySaving,
@@ -72,6 +76,8 @@ class TransactionChangeEventProducerImpl(
             TransactionChangeEvent(
                 "D",
                 transaction.id,
+                transaction.type,
+                transaction.date,
                 BigDecimal(0.0),
                 transaction.amount,
                 currencyProfile.goalMonthlySaving,

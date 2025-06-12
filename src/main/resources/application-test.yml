@@ -1,4 +1,6 @@
 quarkus:
+  datasource:
+    db-kind: postgresql
 
   s3:
     sync-client:
@@ -6,16 +8,10 @@ quarkus:
     devservices:
       enabled: true
       shared: true
-      buckets: balhom-api-bucket
-
-  rest-client:
-    currency-profiles-api:
-      url: http://test
-      scope: javax.inject.Singleton
 
 s3:
   bucket:
-    name: balhom-api-bucket
+    name: balhom-bucket
 
 mp:
   messaging:

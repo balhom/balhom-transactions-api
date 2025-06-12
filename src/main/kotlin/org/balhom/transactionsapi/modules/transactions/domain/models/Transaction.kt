@@ -50,13 +50,14 @@ data class Transaction(
         // Auditable section
         auditableData.updatedAt = LocalDateTime.now()
         auditableData.updatedBy = props.userId.toString()
-
-        validate()
     }
 
     fun validate() {
-        if (documents.size >= MAX_ALLOWED_DOCUMENTS) {
+        if (documents.size > MAX_ALLOWED_DOCUMENTS) {
             throw TransactionDocumentsExceededException()
         }
     }
+
+    fun getDocumentsPath(): String =
+        "${IMAGE_PATH_PREFIX}/${currencyProfileId}/${id}"
 }

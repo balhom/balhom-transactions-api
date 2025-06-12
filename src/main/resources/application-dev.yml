@@ -48,7 +48,7 @@ quarkus:
 
 s3:
   bucket:
-    name: balhom-transactions-api-bucket
+    name: balhom-bucket
 
 kafka:
   bootstrap:
