@@ -10,8 +10,6 @@ transactions.
 | KEYCLOAK_URL                                       | Keycloak instance url. Ex: http://localhost:7080                                                               |
 | KEYCLOAK_REALM                                     | Keycloak instance realm name. Default: balhom-realm                                                            |
 | KEYCLOAK_CLIENT_ID                                 | Keycloak instance client id. Default: balhom-client                                                            |
-| KEYCLOAK_API_CLIENT_ID                             | Keycloak instance client id for the API to read user data. Default: balhom-api-client                          |
-| KEYCLOAK_API_CLIENT_SECRET                         | Keycloak instance client secret for the API to read user data                                                  |
 | POSTGRES_URL                                       | Postgres instance url                                                                                          |
 | POSTGRES_USERNAME                                  | Postgres instance username. Optional                                                                           |
 | POSTGRES_PASSWORD                                  | Postgres instance password. Optional                                                                           |
