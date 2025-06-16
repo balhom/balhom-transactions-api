@@ -19,6 +19,7 @@ import org.balhom.transactionsapi.common.data.params.ApiPageParams
 import org.balhom.transactionsapi.common.data.props.ObjectIdUserProps
 import org.balhom.transactionsapi.modules.transactions.application.TransactionService
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionSortEnum
+import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.props.CreateTransactionProps
 import org.balhom.transactionsapi.modules.transactions.domain.props.GetAllTransactionsProps
 import org.balhom.transactionsapi.modules.transactions.domain.props.TransactionSortAndFilterProps
@@ -65,6 +66,9 @@ class TransactionResource(private val service: TransactionService) {
         @RestQuery
         @NotNull
         currencyProfileId: UUID,
+        @RestQuery
+        @NotNull
+        type: TransactionTypeEnum,
         @BeanParam @Valid filterParams: TransactionFilterParams,
         @BeanParam @Valid pageParams: ApiPageParams,
         @RestQuery sortBy: TransactionSortEnum?,
@@ -87,6 +91,7 @@ class TransactionResource(private val service: TransactionService) {
             .getTransactions(
                 GetAllTransactionsProps(
                     currencyProfileProps,
+                    type,
                     pageParams.toProps(),
                     sortAndFilterProps
                 )

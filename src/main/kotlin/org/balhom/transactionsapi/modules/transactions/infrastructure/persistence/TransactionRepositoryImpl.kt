@@ -8,6 +8,7 @@ import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ApiPageProps
 import org.balhom.transactionsapi.common.data.sql.PageSqlMapper
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionSortEnum
+import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
 import org.balhom.transactionsapi.modules.transactions.domain.props.TransactionSortAndFilterProps
 import org.balhom.transactionsapi.modules.transactions.domain.repositories.TransactionRepository
@@ -34,6 +35,7 @@ class TransactionRepositoryImpl(
 
     override fun findAll(
         currencyProfileId: UUID,
+        type: TransactionTypeEnum,
         sortAndFilterProps: TransactionSortAndFilterProps,
         pageProps: ApiPageProps,
     ): ApiPage<Transaction> {
@@ -49,6 +51,7 @@ class TransactionRepositoryImpl(
         // Sql query parameters
         val parameters = mutableMapOf<String, Any>(
             "currencyProfileId" to currencyProfileId,
+            "type" to type,
             "startDate" to LocalDateTime.of(firstDayOfMonth, LocalTime.MIN),
             "endDate" to LocalDateTime.of(lastDayOfMonth, LocalTime.MAX)
         )
@@ -56,6 +59,7 @@ class TransactionRepositoryImpl(
         // Sql query builder
         val queryBuilder = StringBuilder(
             "${TransactionSqlEntity.CURRENCY_PROFILE_ID_FIELD} = :currencyProfileId " +
+                    "AND ${TransactionSqlEntity.TYPE_FIELD} = :type " +
                     "AND ${TransactionSqlEntity.DATE_FIELD} >= :startDate " +
                     "AND ${TransactionSqlEntity.DATE_FIELD} <= :endDate"
         )

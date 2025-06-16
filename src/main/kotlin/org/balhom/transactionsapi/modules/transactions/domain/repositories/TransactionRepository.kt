@@ -2,6 +2,7 @@ package org.balhom.transactionsapi.modules.transactions.domain.repositories
 
 import org.balhom.transactionsapi.common.data.models.ApiPage
 import org.balhom.transactionsapi.common.data.props.ApiPageProps
+import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import org.balhom.transactionsapi.modules.transactions.domain.models.Transaction
 import org.balhom.transactionsapi.modules.transactions.domain.props.TransactionSortAndFilterProps
 import java.util.*
@@ -11,6 +12,7 @@ interface TransactionRepository {
 
     fun findAll(
         currencyProfileId: UUID,
+        type: TransactionTypeEnum,
         sortAndFilterProps: TransactionSortAndFilterProps,
         pageProps: ApiPageProps,
     ): ApiPage<Transaction>

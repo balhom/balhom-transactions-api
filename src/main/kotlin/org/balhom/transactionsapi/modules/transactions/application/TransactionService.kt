@@ -43,6 +43,7 @@ class TransactionService(
 
         val transactionsPage = transactionRepository.findAll(
             currencyProfileReference.id,
+            props.type,
             props.sortAndFilterProps,
             props.pageProps
         )

@@ -92,6 +92,7 @@ class TransactionSqlEntity : AuditableDataSqlEntity() {
         const val ID_FIELD = "id"
         const val CURRENCY_PROFILE_ID_FIELD = "currencyProfileId"
         const val TITLE_FIELD = "title"
+        const val TYPE_FIELD = "type"
         const val DATE_FIELD = "date"
         const val AMOUNT_FIELD = "amount"
 
