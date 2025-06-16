@@ -16,7 +16,7 @@ class TransactionChangeEventProducerImpl(
     @Channel("transaction-events") private val emitter: Emitter<TransactionChangeEvent>
 ) : TransactionChangeEventProducer {
     fun send(event: TransactionChangeEvent) {
-        Log.debug("Producing Kafka transaction change event: " + event.id)
+        Log.info("Producing Kafka transaction change event: " + event.id)
 
         emitter
             .send(event)

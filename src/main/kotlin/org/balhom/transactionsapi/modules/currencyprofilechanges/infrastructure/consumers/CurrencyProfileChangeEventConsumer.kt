@@ -12,7 +12,7 @@ class CurrencyProfileChangeEventConsumer(
 ) {
     @Incoming("currency-profile-events")
     fun receive(event: CurrencyProfileChangeEvent) {
-        Log.debug("Consuming Kafka currency profile event: " + event.id)
+        Log.info("Consuming Kafka currency profile event: " + event.id)
 
         if (event.action == "D") {
             transactionService.deleteAllTransactions(
