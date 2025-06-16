@@ -12,16 +12,3 @@ quarkus:
 s3:
   bucket:
     name: balhom-bucket
-
-mp:
-  messaging:
-    outgoing:
-      transaction-events:
-        connector: smallrye-kafka
-        topic: transaction-events
-    incoming:
-      currency-profile-events:
-        connector: smallrye-kafka
-        topic: currency-profile-events
-        group:
-          id: transaction-group
