@@ -1,6 +1,7 @@
 package org.balhom.transactionsapi.modules.transactions.infrastructure.producers.data
 
 import io.quarkus.runtime.annotations.RegisterForReflection
+import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionCategoryEnum
 import org.balhom.transactionsapi.modules.transactions.domain.enums.TransactionTypeEnum
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -12,6 +13,7 @@ data class TransactionChangeEvent(
     var id: UUID,
     var type: TransactionTypeEnum,
     var date: LocalDateTime,
+    var category: TransactionCategoryEnum,
     var amount: BigDecimal,
     var oldAmount: BigDecimal?,
     var cpGoalMonthlySaving: BigDecimal,
